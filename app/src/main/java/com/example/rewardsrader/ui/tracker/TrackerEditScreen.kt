@@ -65,6 +65,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Notes
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -170,7 +173,7 @@ fun TrackerEditScreen(
                         .fillMaxSize()
                         .padding(padding)
                         .padding(start = 24.dp, end = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(1.dp)
                 ) {
                     item {
                         TrackerSummaryCard(tracker = tracker)
@@ -206,6 +209,9 @@ fun TrackerEditScreen(
                                     color = MaterialTheme.colorScheme.error
                                 )
                             }
+                        }
+                        item {
+                            Box(modifier = Modifier.height(48.dp))
                         }
                         item {
                             OfferCompleteRow(
@@ -379,7 +385,7 @@ private fun TrackerSummaryCard(tracker: TrackerDetailUi) {
     val endDate = parseTrackerDate(tracker.endDate) ?: LocalDate.now()
     val timeLeft = formatTimeLeftLabel(endDate)
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
+        modifier = Modifier.fillMaxWidth().padding(top = 20.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         if (tracker.title.isNotBlank()) {
@@ -438,12 +444,15 @@ private fun ReminderListCard(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth().padding(top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Column() {
-            Row(){
+            Row(
+                modifier = Modifier.height(48.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
                     contentDescription = "Reminders"
@@ -456,7 +465,7 @@ private fun ReminderListCard(
             modifier = Modifier.weight(1f),
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+//                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 reminders.forEach { reminder ->
                     ReminderRow(reminder = reminder, onDelete = onDelete)
@@ -467,7 +476,8 @@ private fun ReminderListCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(enabled = !isUpdating, onClick = onAdd)
-                    .padding(top = 2.dp)
+                    .height(48.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "Add reminder",
@@ -508,7 +518,8 @@ private fun NotesRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .padding(top = 12.dp, bottom = 12.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {

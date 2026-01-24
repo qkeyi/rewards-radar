@@ -28,8 +28,8 @@
 ## Benefit (pending unless checked)
 - [x] Benefit management: Add/update/remove benefits on a card; confirm destructive actions and refresh state.
 - [x] Benefit types/properties: Support two types:
-  - Credit: fixed amount; refresh cadence (once/monthly/quarterly/annual); category/merchant; effective/expiry; notes/terms. One-time credits use a checkbox; multi-use credits store each credit amount used.
-  - Multiplier: decimal rate (e.g., 0.05 for 5%/5x), optional cap on spend only; refresh cadence; category/merchant; effective/expiry; notes/terms.
+  - Credit: fixed amount; refresh cadence (once/monthly/quarterly/annual); category/merchant; notes/terms. One-time credits use a checkbox; multi-use credits store each credit amount used.
+  - Multiplier: decimal rate (e.g., 0.05 for 5%/5x), optional cap on spend only; refresh cadence; category/merchant; notes/terms.
 - [x] Categories: Store issuer-scoped categories (e.g., “Dining (Chase)”, “Online Shopping (Amex)”) from a selectable list of common types (Dining, Grocery, Online Shopping, Travel, Gas, Drugstore, Streaming, Transit, Utilities) with ability to add custom types; support multi-select per benefit and only show categories for the benefit’s issuer.
 - [x] Usage tracking UI: Multiplier tracks spend amount and derived rewards per transaction; credits track checkbox for single-use or per-use amounts for multi-use; history with `MM/dd/yyyy hh:mm` UTC stored, local display.
 
@@ -129,7 +129,7 @@ Displays all card products. Used as templates
   - Expired: end date passed with transaction total < tracker amount.
   - Example: a monthly benefit for Jan that is not used before Feb is marked Expired.
 - [x] Period window generation:
-  - For credit benefits, create trackers based on benefit frequency (monthly/quarterly/annual/anniversary/etc) within the profile benefit start/end dates.
+  - For credit benefits, create trackers based on benefit frequency (monthly/quarterly/annual/anniversary/etc) without start/end date constraints.
   - For offers, create a single tracker using offer start/end dates.
 - [x] UI:
   - Tracker screen shows three lists: Active, Complete, Expired. Each list can be accessed by tapping the filter chip at the top of the screen.

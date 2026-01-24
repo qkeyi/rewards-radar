@@ -254,8 +254,6 @@ enum CardSubDurationUnit {
 | :--- | :--- | :--- |
 | `profileCardId` | String | @map("profile_card_id") |
 | `benefitId` | String | @map("benefit_id") |
-| `startDateUtc` | String? | @map("start_date_utc") |
-| `endDateUtc` | String? | @map("end_date_utc") |
 | `profileCard` | ProfileCard | @relation(fields: [profileCardId], references: [id], onDelete: Cascade) |
 | `benefit` | Benefit | @relation(fields: [benefitId], references: [id], onDelete: Cascade) |
 

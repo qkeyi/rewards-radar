@@ -3,7 +3,7 @@
 > Prereqs: Read `docs/product_functionality.md` (and `docs/architecture.md` when present) before coding. Keep steps small; validate after each step.
 
 ## 1) Define config schema contract (no code)
-- Format: JSON. Define required fields: `schema_version`, `data_version`; cards with serial `card_id`, issuer, product_name, network, annual_fee_usd, last_updated (UTC `MM/dd/yyyy hh:mm`), data_source, notes; benefits with serial `benefit_id`, card_id, type (enum: credit/multiplier/access/offer), amount_usd/cap_usd, cadence (monthly/quarterly/annual/once), category/merchant, enrollment_required, effective_date/expiry_date (UTC `MM/dd/yyyy hh:mm`), terms/notes.
+- Format: JSON. Define required fields: `schema_version`, `data_version`; cards with serial `card_id`, issuer, product_name, network, annual_fee_usd, last_updated (UTC `MM/dd/yyyy hh:mm`), data_source, notes; benefits with serial `benefit_id`, card_id, type (enum: credit/multiplier/access/offer), amount_usd/cap_usd, cadence (monthly/quarterly/annual/once), category/merchant, enrollment_required, terms/notes.
 - Write the schema doc and a small sample config in `docs/` for reference.
 - **Test**: Validate sample JSON against the schema doc manually; confirm every required field matches `product_functionality` and date/currency constraints.
 
@@ -24,7 +24,7 @@
 
 ## 5) Card list & detail (read-only)
 - Implement a card list screen showing product name, issuer, and status.
-- Implement a card detail screen showing benefits (type, amount/cap, cadence, expiry) and application timeline.
+- Implement a card detail screen showing benefits (type, amount/cap, cadence) and application timeline.
 - **Test**: UI test to add a card via the flow, then verify list item renders and detail shows the expected benefits and application fields.
 
 ## 5.1) Card creation from template (minimal form)
@@ -43,7 +43,7 @@
 - **Test**: Unit/UI test to toggle a reminder and verify persisted state; no actual notification dispatch required yet.
 
 ## Follow-up: Reminder triggers and scheduling
-- Extend notification rules with trigger params (e.g., days_before_expiry, statement_cut_offset, spend_remaining_threshold) and cadence awareness from benefit data.
+- Extend notification rules with trigger params (e.g., statement_cut_offset, spend_remaining_threshold) and cadence awareness from benefit data.
 - Implement scheduling/dispatch respecting local time display while storing trigger times in UTC.
 - **Test**: Unit tests for trigger calculation; UI/integration test to schedule a mock notification and assert it fires at the expected local time window.
 

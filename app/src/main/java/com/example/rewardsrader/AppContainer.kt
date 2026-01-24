@@ -39,7 +39,8 @@ class AppContainer(context: Context) {
             com.example.rewardsrader.data.local.MIGRATION_20_21,
             com.example.rewardsrader.data.local.MIGRATION_21_22,
             com.example.rewardsrader.data.local.MIGRATION_22_23,
-            com.example.rewardsrader.data.local.MIGRATION_23_24
+            com.example.rewardsrader.data.local.MIGRATION_23_24,
+            com.example.rewardsrader.data.local.MIGRATION_24_25
         )
         .build()
 

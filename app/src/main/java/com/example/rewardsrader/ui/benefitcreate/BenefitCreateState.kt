@@ -13,8 +13,6 @@ data class BenefitCreateState(
     val categories: List<String> = emptyList(),
     val customCategories: List<String> = emptyList(),
     val customCategory: String = "",
-    val effectiveDate: String = "",
-    val expiryDate: String = "",
     val notes: String = "",
     val dataSource: String? = null,
     val isEditing: Boolean = false,

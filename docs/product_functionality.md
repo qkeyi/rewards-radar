@@ -22,7 +22,7 @@
 - **Security**: Store only non-sensitive card info by default. If storing account identifiers, apply local encryption and biometric unlock where available.
 
 ## Card data source (centralized config)
-- Maintain a versioned JSON (or YAML) data file that lists card products, annual fees, benefits, caps, cadences, categories, enrollment requirements, and effective/expiry dates.
+- Maintain a versioned JSON (or YAML) data file that lists card products, annual fees, benefits, caps, cadences, categories, and enrollment requirements.
 - Treat it as the single source of truth, updated frequently by maintainers; include schema versioning and change logs.
 - Bundle a stable snapshot in the app; allow manual refresh from the maintained source when connectivity is available.
 - Include metadata per entry: last_updated, data_source (maintainer), and optional notes for special handling (e.g., regional differences).
@@ -31,9 +31,9 @@
 ## Key entities (draft)
 - **Card**: id, issuer, product name, network, annual fee, open date, close date, status, notes.
 - **Application**: card_id, application date, decision date, status, credit bureau, reconsideration notes, welcome offer terms.
-- **Benefit**: card_id, type (credit/multiplier/access/etc.), amount/cap, cadence (monthly/quarterly/annual), category/merchant, enrollment_required, expiry, terms, data_source.
+- **Benefit**: card_id, type (credit/multiplier/access/etc.), amount/cap, cadence (monthly/quarterly/annual), category/merchant, enrollment_required, terms, data_source.
 - **Usage entry**: benefit_id, date, amount/value used, proof/receipt link, location/merchant, notes.
-- **Notification rule**: benefit_id, trigger (days-before-expiry, statement-cut, spend-remaining), channel (in-app, push), enabled flag.
+- **Notification rule**: benefit_id, trigger (statement-cut, spend-remaining), channel (in-app, push), enabled flag.
 
 ## UX flows (high level)
 - Onboarding: user adds first card; selects product from catalog (config), benefits/fees pre-populate, user fills personal details (open date, status, statement cut, welcome offer progress).

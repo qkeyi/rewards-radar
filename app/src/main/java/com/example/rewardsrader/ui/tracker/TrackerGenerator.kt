@@ -26,36 +26,15 @@ class TrackerGenerator(
 
         cards.forEach { card ->
             val profileCardId = card.profileCard.id
-            val fallbackStart = parseTrackerDate(card.profileCard.openDateUtc) ?: today
+            val cardStart = parseTrackerDate(card.profileCard.openDateUtc) ?: today
             card.benefits.forEach { entry ->
                 if (entry.benefit.type != BenefitType.Credit) return@forEach
-                val startDate = parseTrackerDate(entry.link.startDateUtc) ?: fallbackStart
-                val endDate = parseTrackerDate(entry.link.endDateUtc)
                 val frequency = entry.benefit.frequency
-                if (frequency == BenefitFrequency.EveryTransaction) {
-                    val safeEnd = endDate?.takeIf { !it.isBefore(startDate) } ?: startDate
-                    if (shouldGenerateTracker(startDate, endDate, today)) {
-                        addTracker(
-                            existingKeys = existingKeys,
-                            newTrackers = newTrackers,
-                            profileCardId = profileCardId,
-                            profileCardBenefitId = entry.link.id,
-                            offerId = null,
-                            sourceType = TrackerSourceType.Benefit,
-                            startDate = startDate,
-                            endDate = safeEnd
-                        )
-                    }
-                    return@forEach
-                }
-
-                val safeEnd = endDate?.let { if (it.isBefore(startDate)) startDate else it }
-                if (!shouldGenerateTracker(startDate, safeEnd, today)) return@forEach
-                if (isCalendarFrequency(frequency)) {
-                    val periodStart = currentCalendarPeriodStart(startDate, today, frequency)
-                    val periodEnd = calendarPeriodEnd(periodStart, frequency)
-                    val finalEnd = safeEnd?.let { if (periodEnd.isAfter(it)) it else periodEnd } ?: periodEnd
-                    if (!periodStart.isAfter(finalEnd)) {
+                if (today.isBefore(cardStart)) return@forEach
+                when (frequency) {
+                    BenefitFrequency.EveryTransaction -> {
+                        val periodStart = today.withDayOfMonth(1)
+                        val periodEnd = periodStart.plusMonths(1).minusDays(1)
                         addTracker(
                             existingKeys = existingKeys,
                             newTrackers = newTrackers,
@@ -64,16 +43,28 @@ class TrackerGenerator(
                             offerId = null,
                             sourceType = TrackerSourceType.Benefit,
                             startDate = periodStart,
-                            endDate = finalEnd
+                            endDate = periodEnd
                         )
                     }
-                } else {
-                    val period = periodForFrequency(frequency)
-                    if (period != null) {
-                        val periodStart = currentPeriodStart(startDate, today, period)
+                    BenefitFrequency.EveryAnniversary -> {
+                        val period = Period.ofYears(1)
+                        val periodStart = currentPeriodStart(cardStart, today, period)
                         val periodEnd = periodStart.plus(period).minusDays(1)
-                        val finalEnd = safeEnd?.let { if (periodEnd.isAfter(it)) it else periodEnd } ?: periodEnd
-                        if (!periodStart.isAfter(finalEnd)) {
+                        addTracker(
+                            existingKeys = existingKeys,
+                            newTrackers = newTrackers,
+                            profileCardId = profileCardId,
+                            profileCardBenefitId = entry.link.id,
+                            offerId = null,
+                            sourceType = TrackerSourceType.Benefit,
+                            startDate = periodStart,
+                            endDate = periodEnd
+                        )
+                    }
+                    else -> {
+                        if (isCalendarFrequency(frequency)) {
+                            val periodStart = calendarPeriodStart(today, frequency)
+                            val periodEnd = calendarPeriodEnd(periodStart, frequency)
                             addTracker(
                                 existingKeys = existingKeys,
                                 newTrackers = newTrackers,
@@ -82,7 +73,7 @@ class TrackerGenerator(
                                 offerId = null,
                                 sourceType = TrackerSourceType.Benefit,
                                 startDate = periodStart,
-                                endDate = finalEnd
+                                endDate = periodEnd
                             )
                         }
                     }
@@ -186,13 +177,6 @@ class TrackerGenerator(
         }
     }
 
-    private fun periodForFrequency(frequency: BenefitFrequency): Period? =
-        when (frequency) {
-            BenefitFrequency.EveryAnniversary -> Period.ofYears(1)
-            BenefitFrequency.EveryTransaction -> null
-            else -> null
-        }
-
     private fun shouldGenerateTracker(
         startDate: LocalDate,
         endDate: LocalDate?,
@@ -211,20 +195,6 @@ class TrackerGenerator(
             BenefitFrequency.Annually -> true
             else -> false
         }
-
-    private fun currentCalendarPeriodStart(
-        startDate: LocalDate,
-        today: LocalDate,
-        frequency: BenefitFrequency
-    ): LocalDate {
-        val todayStart = calendarPeriodStart(today, frequency)
-        val startPeriodStart = calendarPeriodStart(startDate, frequency)
-        return if (todayStart == startPeriodStart && startDate.isAfter(todayStart)) {
-            startDate
-        } else {
-            todayStart
-        }
-    }
 
     private fun currentPeriodStart(
         startDate: LocalDate,

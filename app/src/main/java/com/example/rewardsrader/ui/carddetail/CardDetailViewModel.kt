@@ -36,7 +36,6 @@ data class BenefitUi(
     val type: String,
     val amount: String,
     val cadence: String,
-    val expiry: String?,
     val notes: String?
 )
 
@@ -295,7 +294,6 @@ class CardDetailViewModel(
             type = benefit.type.name,
             amount = buildAmount(benefit),
             cadence = benefit.frequency.name,
-            expiry = entry.link.endDateUtc,
             notes = benefit.notes
         )
     }
@@ -359,7 +357,6 @@ class CardDetailViewModel(
             type = benefit.type.name,
             amount = buildAmount(benefit),
             cadence = benefit.frequency.name,
-            expiry = null,
             notes = benefit.notes
         )
         if (index >= 0) {

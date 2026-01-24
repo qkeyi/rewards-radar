@@ -34,8 +34,6 @@ data class BenefitTemplate(
     val category: String? = null,
     val merchant: String? = null,
     @SerialName("enrollment_required") val enrollmentRequired: Boolean,
-    @SerialName("effective_date") val effectiveDate: String,
-    @SerialName("expiry_date") val expiryDate: String? = null,
     val terms: String? = null,
     val notes: String? = null
 )

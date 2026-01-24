@@ -225,14 +225,9 @@ class CardRepository(
     suspend fun getBenefitsByIds(ids: List<String>): List<BenefitEntity> =
         benefitDao.getByIds(ids)
 
-    suspend fun getProfileCardBenefit(profileCardId: String, benefitId: String): ProfileCardBenefitEntity? =
-        profileCardBenefitDao.getForProfileCardAndBenefit(profileCardId, benefitId)
-
     suspend fun addBenefitForProfileCard(
         profileCardId: String,
-        benefit: BenefitEntity,
-        startDateUtc: String?,
-        endDateUtc: String?
+        benefit: BenefitEntity
     ): BenefitEntity {
         val benefitId = benefit.id.ifBlank { newId() }
         val finalBenefit = benefit.copy(id = benefitId)
@@ -240,22 +235,14 @@ class CardRepository(
         val link = ProfileCardBenefitEntity(
             id = newId(),
             profileCardId = profileCardId,
-            benefitId = benefitId,
-            startDateUtc = startDateUtc,
-            endDateUtc = endDateUtc
+            benefitId = benefitId
         )
         profileCardBenefitDao.insert(link)
         return finalBenefit
     }
 
-    suspend fun updateBenefitForProfileCard(
-        profileCardId: String,
-        benefit: BenefitEntity,
-        startDateUtc: String?,
-        endDateUtc: String?
-    ) {
+    suspend fun updateBenefitForProfileCard(benefit: BenefitEntity) {
         benefitDao.update(benefit)
-        profileCardBenefitDao.updateDates(profileCardId, benefit.id, startDateUtc, endDateUtc)
     }
 
     suspend fun deleteProfileCard(profileCardId: String) {

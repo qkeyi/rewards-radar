@@ -484,3 +484,21 @@
 - `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerGenerator.kt`: Updates existing offer trackers when offer dates change instead of creating duplicates.
 - `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerViewModel.kt`: Applies tracker updates after generation.
 - `app/src/main/java/com/example/rewardsrader/data/worker/TrackerRefreshWorker.kt`: Applies tracker updates in the background refresh worker.
+
+## 2026-01-23 - Benefit date removal
+- `app/src/main/java/com/example/rewardsrader/data/local/entity/ProfileCardBenefitEntity.kt`: Removes start/end dates from profile benefit links.
+- `app/src/main/java/com/example/rewardsrader/data/local/dao/ProfileCardBenefitDao.kt`: Drops date update queries for profile benefit links.
+- `app/src/main/java/com/example/rewardsrader/data/local/repository/CardRepository.kt`: Simplifies benefit add/update APIs without date inputs.
+- `app/src/main/java/com/example/rewardsrader/data/local/Migrations.kt`: Adds migration to remove benefit dates from profile_card_benefits.
+- `app/src/main/java/com/example/rewardsrader/data/local/AppDatabase.kt`: Bumps the database version for the profile benefit schema change.
+- `app/src/main/java/com/example/rewardsrader/AppContainer.kt`: Registers the new migration.
+- `app/src/main/java/com/example/rewardsrader/ui/benefitcreate/BenefitCreateState.kt`: Removes benefit effective/expiry state fields.
+- `app/src/main/java/com/example/rewardsrader/ui/benefitcreate/BenefitCreateViewModel.kt`: Drops benefit date editing and persistence.
+- `app/src/main/java/com/example/rewardsrader/ui/benefitcreate/BenefitCreateScreen.kt`: Removes date pickers from the benefit form.
+- `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerGenerator.kt`: Generates benefit trackers based on frequency only.
+- `app/src/main/java/com/example/rewardsrader/config/CardConfigModels.kt`: Removes effective/expiry fields from benefit templates.
+- `app/src/main/java/com/example/rewardsrader/config/CardConfigParser.kt`: Stops validating benefit effective/expiry dates.
+- `app/src/main/java/com/example/rewardsrader/template/CardTemplateImporter.kt`: Stops writing benefit dates when importing templates.
+- `app/src/main/java/com/example/rewardsrader/notifications/BootReceiver.kt`: Wires the new migration for boot-time rescheduling.
+- `app/src/main/java/com/example/rewardsrader/notifications/NotificationReceiver.kt`: Wires the new migration for notification handling.
+- `app/src/main/java/com/example/rewardsrader/data/worker/TrackerRefreshWorker.kt`: Wires the new migration for background refresh.

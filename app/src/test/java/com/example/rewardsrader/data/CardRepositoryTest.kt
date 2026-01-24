@@ -130,9 +130,7 @@ class CardRepositoryTest {
         benefits.forEach {
             repository.addBenefitForProfileCard(
                 profileCardId = profileCardId,
-                benefit = it,
-                startDateUtc = "01/01/2025 09:00",
-                endDateUtc = "12/31/2025 11:59"
+                benefit = it
             )
         }
 

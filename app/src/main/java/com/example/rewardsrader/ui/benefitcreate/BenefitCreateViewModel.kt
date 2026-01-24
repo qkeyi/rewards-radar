@@ -34,8 +34,8 @@ class BenefitCreateViewModel(
     fun startEdit(profileCardId: String, benefitId: String, productName: String, issuer: String) {
         viewModelScope.launch {
             val existingCustom = _state.value.customCategories.toMutableList()
-            runCatching { repository.getBenefit(benefitId) to repository.getProfileCardBenefit(profileCardId, benefitId) }
-                .onSuccess { (benefit, link) ->
+            runCatching { repository.getBenefit(benefitId) }
+                .onSuccess { benefit ->
                     benefit ?: return@onSuccess
                     val categories = benefit.category.map { it.name }
                     existingCustom.addAll(categories)
@@ -52,8 +52,6 @@ class BenefitCreateViewModel(
                         categories = categories,
                         customCategories = existingCustom.distinct(),
                         customCategory = "",
-                        effectiveDate = link?.startDateUtc.orEmpty(),
-                        expiryDate = link?.endDateUtc.orEmpty(),
                         notes = benefit.notes.orEmpty(),
                         dataSource = null,
                         isEditing = true
@@ -70,8 +68,6 @@ class BenefitCreateViewModel(
     fun setAmount(value: String) { _state.value = _state.value.copy(amount = value.trimToScale(2)) }
     fun setCap(value: String) { _state.value = _state.value.copy(cap = value.trimToScale(2)) }
     fun setCadence(value: String) { _state.value = _state.value.copy(cadence = value) }
-    fun setEffectiveDate(value: String) { _state.value = _state.value.copy(effectiveDate = value) }
-    fun setExpiryDate(value: String) { _state.value = _state.value.copy(expiryDate = value) }
     fun setNotes(value: String) { _state.value = _state.value.copy(notes = value) }
 
     fun toggleCategory(category: String) {
@@ -128,18 +124,13 @@ class BenefitCreateViewModel(
             runCatching {
                 if (isEditing) {
                     repository.updateBenefitForProfileCard(
-                        profileCardId = _state.value.cardId,
-                        benefit = benefit,
-                        startDateUtc = _state.value.effectiveDate.ifBlank { null },
-                        endDateUtc = _state.value.expiryDate.ifBlank { null }
+                        benefit = benefit
                     )
                     benefit
                 } else {
                     repository.addBenefitForProfileCard(
                         profileCardId = _state.value.cardId,
-                        benefit = benefit,
-                        startDateUtc = _state.value.effectiveDate.ifBlank { null },
-                        endDateUtc = _state.value.expiryDate.ifBlank { null }
+                        benefit = benefit
                     )
                 }
             }.onSuccess {

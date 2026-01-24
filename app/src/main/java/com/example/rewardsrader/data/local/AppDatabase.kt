@@ -52,7 +52,7 @@ import com.example.rewardsrader.data.local.entity.TrackerTransactionEntity
         TemplateCardEntity::class,
         TemplateCardBenefitEntity::class
     ],
-    version = 24,
+    version = 25,
     exportSchema = false
 )
 @TypeConverters(EnumConverters::class)

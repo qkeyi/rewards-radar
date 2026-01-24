@@ -549,3 +549,38 @@ val MIGRATION_23_24 = object : Migration(23, 24) {
         )
     }
 }
+
+// Migration 24->25 removes benefit date columns from profile_card_benefits.
+val MIGRATION_24_25 = object : Migration(24, 25) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS profile_card_benefits_new (
+                id TEXT NOT NULL PRIMARY KEY,
+                profileCardId TEXT NOT NULL,
+                benefitId TEXT NOT NULL,
+                FOREIGN KEY(profileCardId) REFERENCES profile_cards(id) ON DELETE CASCADE ON UPDATE NO ACTION,
+                FOREIGN KEY(benefitId) REFERENCES benefits(id) ON DELETE CASCADE ON UPDATE NO ACTION
+            )
+            """.trimIndent()
+        )
+        database.execSQL(
+            """
+            INSERT INTO profile_card_benefits_new (
+                id,
+                profileCardId,
+                benefitId
+            )
+            SELECT
+                id,
+                profileCardId,
+                benefitId
+            FROM profile_card_benefits
+            """.trimIndent()
+        )
+        database.execSQL("DROP TABLE profile_card_benefits")
+        database.execSQL("ALTER TABLE profile_card_benefits_new RENAME TO profile_card_benefits")
+        database.execSQL("CREATE INDEX IF NOT EXISTS index_profile_card_benefits_profileCardId ON profile_card_benefits(profileCardId)")
+        database.execSQL("CREATE INDEX IF NOT EXISTS index_profile_card_benefits_benefitId ON profile_card_benefits(benefitId)")
+    }
+}

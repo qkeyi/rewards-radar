@@ -128,8 +128,6 @@ class CardTemplateImporterTest {
               "category": "dining",
               "merchant": "Restaurant partners",
               "enrollment_required": true,
-              "effective_date": "01/01/2025 09:00",
-              "expiry_date": "12/31/2025 11:59",
               "terms": "Enroll each calendar year; credit resets monthly.",
               "notes": "Credit applies per statement month."
             },
@@ -143,8 +141,6 @@ class CardTemplateImporterTest {
               "category": "groceries",
               "merchant": "US supermarkets",
               "enrollment_required": false,
-              "effective_date": "01/01/2025 09:00",
-              "expiry_date": "12/31/2025 11:59",
               "terms": "6x points on up to $6k annual supermarket spend; excludes superstores.",
               "notes": null
             }

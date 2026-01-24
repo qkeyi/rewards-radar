@@ -18,8 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
@@ -31,9 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,10 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.flow.StateFlow
 
 private val commonCategories = listOf(
@@ -64,8 +56,6 @@ fun BenefitCreateScreen(
     onAmountChange: (String) -> Unit,
     onCapChange: (String) -> Unit,
     onCadenceChange: (String) -> Unit,
-    onEffectiveDateChange: (String) -> Unit,
-    onExpiryDateChange: (String) -> Unit,
     onNotesChange: (String) -> Unit,
     onToggleCategory: (String) -> Unit,
     onCustomCategoryChange: (String) -> Unit,
@@ -73,29 +63,8 @@ fun BenefitCreateScreen(
     onRemoveCustomCategory: (String) -> Unit
 ) {
     val state by stateFlow.collectAsState()
-    var showEffectivePicker by remember { mutableStateOf(false) }
-    var showExpiryPicker by remember { mutableStateOf(false) }
     var showTypeDialog by remember { mutableStateOf(false) }
     var showFrequencyDialog by remember { mutableStateOf(false) }
-    val effectiveDatePickerState = rememberDatePickerState()
-    val expiryDatePickerState = rememberDatePickerState()
-
-    LaunchedEffect(showEffectivePicker, state.effectiveDate) {
-        if (showEffectivePicker) {
-            val millis = state.effectiveDate.toMillis()
-            if (millis != null) {
-                effectiveDatePickerState.selectedDateMillis = millis
-            }
-        }
-    }
-    LaunchedEffect(showExpiryPicker, state.expiryDate) {
-        if (showExpiryPicker) {
-            val millis = state.expiryDate.toMillis()
-             if (millis != null) {
-                expiryDatePickerState.selectedDateMillis = millis
-            }
-        }
-    }
     val scrollState = rememberScrollState()
 
     Scaffold(
@@ -176,16 +145,6 @@ fun BenefitCreateScreen(
             HorizontalDivider(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp))
 
             InlineSelectionRow(
-                label = "Start date",
-                value = state.effectiveDate.ifBlank { "Select date" },
-                onClick = { showEffectivePicker = true }
-            )
-            InlineSelectionRow(
-                label = "End date",
-                value = state.expiryDate.ifBlank { "Select date" },
-                onClick = { showExpiryPicker = true }
-            )
-            InlineSelectionRow(
                 label = "Frequency",
                 value = state.cadence.toDisplayLabel(),
                 onClick = { showFrequencyDialog = true }
@@ -242,36 +201,6 @@ fun BenefitCreateScreen(
 
     // Custom category dialog removed (enum-only categories).
 
-    if (showEffectivePicker) {
-        DatePickerDialog(
-            onDismissRequest = { showEffectivePicker = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    val formatted = effectiveDatePickerState.selectedDateMillis.toDateString()
-                    formatted?.let { onEffectiveDateChange(it) }
-                    showEffectivePicker = false
-                }) { Text("Save") }
-            },
-            dismissButton = { TextButton(onClick = { showEffectivePicker = false }) { Text("Cancel") } }
-        ) {
-            DatePicker(state = effectiveDatePickerState)
-        }
-    }
-    if (showExpiryPicker) {
-        DatePickerDialog(
-            onDismissRequest = { showExpiryPicker = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    val formatted = expiryDatePickerState.selectedDateMillis.toDateString()
-                    formatted?.let { onExpiryDateChange(it) }
-                    showExpiryPicker = false
-                }) { Text("Save") }
-            },
-            dismissButton = { TextButton(onClick = { showExpiryPicker = false }) { Text("Cancel") } }
-        ) {
-            DatePicker(state = expiryDatePickerState)
-        }
-    }
     // Transaction creation/editing is handled in the tracker feature.
 }
 
@@ -402,8 +331,6 @@ private fun FlowCategoryChips(
     }
 }
 
-private val benefitDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-
 private fun String.toDisplayLabel(): String = when (lowercase()) {
     "everytransaction", "every_transaction" -> "Every transaction"
     "everyanniversary", "every_anniversary" -> "Every anniversary"
@@ -415,20 +342,4 @@ private fun String.toDisplayLabel(): String = when (lowercase()) {
     "credit" -> "Credit"
     "multiplier" -> "Multiplier"
     else -> replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
-}
-
-private fun String.toMillis(): Long? {
-    if (isBlank()) return null
-    return runCatching {
-        LocalDate.parse(this, benefitDateFormatter)
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
-    }.getOrNull()
-}
-
-private fun Long?.toDateString(): String? {
-    this ?: return null
-    val date = Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalDate()
-    return benefitDateFormatter.format(date)
 }

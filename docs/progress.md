@@ -438,6 +438,12 @@
 ## 2026-01-22 - Offer tracker date updates
 - Updating an offer's dates now updates the existing tracker instead of creating a duplicate (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerGenerator.kt`, `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerViewModel.kt`, `app/src/main/java/com/example/rewardsrader/data/worker/TrackerRefreshWorker.kt`).
 
+## 2026-01-23 - Benefit date removal
+- Removed benefit start/end dates from profile benefit links, migrations, and schema docs (`app/src/main/java/com/example/rewardsrader/data/local/entity/ProfileCardBenefitEntity.kt`, `app/src/main/java/com/example/rewardsrader/data/local/Migrations.kt`, `app/src/main/java/com/example/rewardsrader/data/local/AppDatabase.kt`, `docs/schema/schema.prisma`, `docs/schema/schema.md`).
+- Simplified benefit creation/editing to drop date fields and related config parsing (`app/src/main/java/com/example/rewardsrader/ui/benefitcreate/BenefitCreateState.kt`, `app/src/main/java/com/example/rewardsrader/ui/benefitcreate/BenefitCreateViewModel.kt`, `app/src/main/java/com/example/rewardsrader/ui/benefitcreate/BenefitCreateScreen.kt`, `app/src/main/java/com/example/rewardsrader/config/CardConfigModels.kt`, `app/src/main/java/com/example/rewardsrader/config/CardConfigParser.kt`).
+- Tracker generation for benefits now uses frequency only and ignores benefit start/end dates (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerGenerator.kt`).
+- Updated benefit import/test fixtures and config assets to drop effective/expiry fields (`app/src/main/java/com/example/rewardsrader/template/CardTemplateImporter.kt`, `app/src/main/assets/card_config.json`, `app/src/test/java/com/example/rewardsrader/config/CardConfigParserTest.kt`, `app/src/test/java/com/example/rewardsrader/template/CardTemplateImporterTest.kt`).
+
 ## 2026-01-22 - Reminder selection UI
 - Removed default pre-selection in the reminder timing dialog (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditScreen.kt`).
 - Prevented duplicate reminder offsets from being added in the tracker detail flow (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditViewModel.kt`).

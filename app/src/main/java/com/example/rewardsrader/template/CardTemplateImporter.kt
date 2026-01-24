@@ -98,13 +98,10 @@ class CardTemplateImporter(
         )
         repository.upsertProfileCards(listOf(profileCard))
         benefitEntities.forEachIndexed { index, templateBenefit ->
-            val templateSource = benefitTemplates[index]
             val copiedBenefit = templateBenefit.copy(id = repository.newId())
             repository.addBenefitForProfileCard(
                 profileCardId = profileCardId,
-                benefit = copiedBenefit,
-                startDateUtc = templateSource.effectiveDate,
-                endDateUtc = templateSource.expiryDate
+                benefit = copiedBenefit
             )
         }
 
@@ -160,9 +157,7 @@ class CardTemplateImporter(
                 val copied = benefit.copy(id = repository.newId())
                 repository.addBenefitForProfileCard(
                     profileCardId = profileCardId,
-                    benefit = copied,
-                    startDateUtc = null,
-                    endDateUtc = null
+                    benefit = copied
                 )
             }
         }

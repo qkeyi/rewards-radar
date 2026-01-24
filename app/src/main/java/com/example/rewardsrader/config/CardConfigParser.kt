@@ -63,10 +63,6 @@ class CardConfigParser(
             if (!cardIds.contains(benefit.cardId)) {
                 errors.add("benefit_id ${benefit.benefitId} references missing card_id ${benefit.cardId}.")
             }
-            validateDate(benefit.effectiveDate, "effective_date for benefit_id ${benefit.benefitId}", errors)
-            benefit.expiryDate?.let {
-                validateDate(it, "expiry_date for benefit_id ${benefit.benefitId}", errors)
-            }
         }
 
         return if (errors.isEmpty()) {

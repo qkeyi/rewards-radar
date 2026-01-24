@@ -479,3 +479,8 @@
 - `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditScreen.kt`: Styles the offer completion button with a filled background color.
 - `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditScreen.kt`: Uses a filled `Button` to guarantee the background color is visible.
 - `app/src/main/java/com/example/rewardsrader/MainActivity.kt`: Uses `popBackStack()` for offer completion navigation to mirror the back button behavior.
+
+## 2026-01-22 - Offer tracker date updates
+- `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerGenerator.kt`: Updates existing offer trackers when offer dates change instead of creating duplicates.
+- `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerViewModel.kt`: Applies tracker updates after generation.
+- `app/src/main/java/com/example/rewardsrader/data/worker/TrackerRefreshWorker.kt`: Applies tracker updates in the background refresh worker.

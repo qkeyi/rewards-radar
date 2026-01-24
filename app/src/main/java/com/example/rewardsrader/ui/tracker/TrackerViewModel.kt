@@ -37,8 +37,11 @@ class TrackerViewModel(
                 val activeCards = cards.filter { it.profileCard.status == CardStatus.Active }
                 val cardIds = activeCards.map { it.profileCard.id }
                 val existing = repository.getTrackersForProfileCards(cardIds)
-                val newTrackers = trackerGenerator.generateMissingTrackers(activeCards, existing)
-                repository.insertTrackers(newTrackers)
+                val trackerResult = trackerGenerator.generateMissingTrackers(activeCards, existing)
+                repository.insertTrackers(trackerResult.newTrackers)
+                trackerResult.updatedTrackers.forEach { tracker ->
+                    repository.updateTracker(tracker)
+                }
                 val trackers = repository.getTrackersForProfileCards(cardIds)
                 val transactions = repository.getTrackerTransactionsForTrackers(trackers.map { it.id })
                 buildUiState(activeCards, trackers, transactions)

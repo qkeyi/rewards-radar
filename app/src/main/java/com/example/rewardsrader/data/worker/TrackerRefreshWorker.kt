@@ -92,8 +92,11 @@ class TrackerRefreshWorker(
             if (cards.isNotEmpty()) {
                 val existing = repository.getTrackersForProfileCards(cards.map { it.profileCard.id })
                 val generator = TrackerGenerator { repository.newId() }
-                val newTrackers = generator.generateMissingTrackers(cards, existing, LocalDate.now())
-                repository.insertTrackers(newTrackers)
+                val trackerResult = generator.generateMissingTrackers(cards, existing, LocalDate.now())
+                repository.insertTrackers(trackerResult.newTrackers)
+                trackerResult.updatedTrackers.forEach { tracker ->
+                    repository.updateTracker(tracker)
+                }
             }
             reminderScheduler.rescheduleEnabledTrackerReminders()
             Result.success()

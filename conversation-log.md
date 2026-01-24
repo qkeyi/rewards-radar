@@ -744,3 +744,5 @@ Assistant: Added 2025-12-28 benefit edit bottom sheet entry to progress and arch
 2026-01-22 15:40 Assistant: Centered the notes text vertically while keeping the icon top-aligned.
 2026-01-22 15:44 User: make `add reminder` a clickable row
 2026-01-22 15:44 Assistant: Converted the Add reminder action into a full-width clickable row.
+2026-01-23 16:24 User: after changing dates of an offer, it creates a new tracker instead of replacing the original tracker. fix it.
+2026-01-23 16:24 Assistant: Updated tracker generation to update existing offer trackers on date changes instead of creating duplicates.

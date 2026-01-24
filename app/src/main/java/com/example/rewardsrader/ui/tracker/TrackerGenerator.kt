@@ -16,9 +16,13 @@ class TrackerGenerator(
         cards: List<ProfileCardWithRelations>,
         existing: List<TrackerEntity>,
         today: LocalDate = LocalDate.now()
-    ): List<TrackerEntity> {
+    ): TrackerGenerationResult {
         val existingKeys = existing.mapTo(mutableSetOf()) { trackerKey(it) }
         val newTrackers = mutableListOf<TrackerEntity>()
+        val updatedTrackers = mutableListOf<TrackerEntity>()
+        val offerTrackersById = existing
+            .filter { it.type == TrackerSourceType.Offer && it.offerId != null }
+            .groupBy { it.offerId!! }
 
         cards.forEach { card ->
             val profileCardId = card.profileCard.id
@@ -111,6 +115,23 @@ class TrackerGenerator(
                 val startDate = parseTrackerDate(offer.startDateUtc) ?: today
                 val endDate = parseTrackerDate(offer.endDateUtc) ?: startDate
                 val safeEnd = if (endDate.isBefore(startDate)) startDate else endDate
+                val existingOfferTracker = offerTrackersById[offer.id]
+                    ?.maxByOrNull { tracker -> parseTrackerDate(tracker.endDateUtc) ?: LocalDate.MIN }
+                if (existingOfferTracker != null) {
+                    val newStart = formatTrackerDate(startDate)
+                    val newEnd = formatTrackerDate(safeEnd)
+                    if (existingOfferTracker.startDateUtc != newStart ||
+                        existingOfferTracker.endDateUtc != newEnd
+                    ) {
+                        updatedTrackers.add(
+                            existingOfferTracker.copy(
+                                startDateUtc = newStart,
+                                endDateUtc = newEnd
+                            )
+                        )
+                    }
+                    return@forEach
+                }
                 if (shouldGenerateTracker(startDate, safeEnd, today)) {
                     addTracker(
                         existingKeys = existingKeys,
@@ -126,7 +147,10 @@ class TrackerGenerator(
             }
         }
 
-        return newTrackers
+        return TrackerGenerationResult(
+            newTrackers = newTrackers,
+            updatedTrackers = updatedTrackers
+        )
     }
 
     private fun addTracker(
@@ -258,3 +282,8 @@ class TrackerGenerator(
         val endDate: String
     )
 }
+
+data class TrackerGenerationResult(
+    val newTrackers: List<TrackerEntity>,
+    val updatedTrackers: List<TrackerEntity>
+)

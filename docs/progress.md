@@ -435,6 +435,9 @@
 - Aligned the notes icon to the top while keeping the notes content vertically centered (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditScreen.kt`).
 - Made the Add reminder row fully clickable instead of a button (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditScreen.kt`).
 
+## 2026-01-22 - Offer tracker date updates
+- Updating an offer's dates now updates the existing tracker instead of creating a duplicate (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerGenerator.kt`, `app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerViewModel.kt`, `app/src/main/java/com/example/rewardsrader/data/worker/TrackerRefreshWorker.kt`).
+
 ## 2026-01-22 - Reminder selection UI
 - Removed default pre-selection in the reminder timing dialog (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditScreen.kt`).
 - Prevented duplicate reminder offsets from being added in the tracker detail flow (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditViewModel.kt`).

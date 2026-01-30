@@ -108,7 +108,12 @@ Displays all card products. Used as templates
   - [ ] Load user data after logging in.
 
 ## Authentication
-- [ ] use google account to login.
+- [x] Google account login (FirebaseUI Compose, Google provider only)
+  - Launch: check existing auth session; if signed in, go to Cards, otherwise show LoginScreen.
+  - Login screen UI: FirebaseUI Auth screen with Google sign-in; errors surfaced via snackbar.
+  - Sign-in flow: Credential Manager Google ID token -> Firebase Auth (handled by FirebaseUI).
+  - Failure handling: user cancel returns to idle; auth/network errors show message + retry.
+  - Post-login sync: deferred.
 
 ## Profile
 - [ ] multiple profiles for each user

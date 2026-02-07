@@ -30,15 +30,15 @@
 - Store only non-sensitive card details; if sensitive identifiers are ever added, gate them behind local encryption/biometric unlock.
 
 ## Mandatory Pre-work for Agents
-- Read all files in `docs/`
-- `docs/product_functionality.md` overall functionality.
-- `docs/architecture.md` each file's functionality and purpose.
-- `docs/feature_implementation.md` features.
-- `schema.prisma` system / database structure.
-- `schema.md` detailed description of database structure.
+- Read `docs/product_functionality.md`. overall functionality.
+- Read `docs/architecture.md`. general rules for project structure.
+- Read`docs/feature_implementation_plan/index.md`. feature implementation plan index.
+- Read`schema.prisma`. system / database structure. 
 
 ## Logging
-- You should log what you did, current progress and conversation when you are given a command to do so.
-- Log each file's functionality, what's the purpose of each file in `docs/architecture.md`.
-- Log what features implemented, what changes you made to each file, progress so far in `docs/progress.md`.
-- Log our full conversation into `conversation-log.md` with date and time followed by message.
+- Do not read any files in `log` folder, you should write only, unless requested.
+- You should log what you did, current progress and conversation when you are told to do so.
+- Log what features implemented, what changes you made to each file, progress so far in `log/progress.md`.
+  - for example: [12/01/2026 11:34PM] Removed benefit start/end dates from profile benefit links.
+- Log our full conversation into `log/conversation-log.md` with date and time followed by message.
+  - for example: [12/01/2026 11:34PM] User: hello. [12/01/2026 11:34PM] Assistant: hi.

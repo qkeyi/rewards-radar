@@ -456,3 +456,4 @@
 - Added a filled background color to the offer completion text button (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditScreen.kt`).
 - Rendered the offer completion action as a filled button so the background is always visible (`app/src/main/java/com/example/rewardsrader/ui/tracker/TrackerEditScreen.kt`).
 - Offer completion now navigates back using `popBackStack()` to mirror the back button behavior (`app/src/main/java/com/example/rewardsrader/MainActivity.kt`).
+[02/06/2026 05:29PM] Split docs/feature_implementation.md into per-feature files under docs/feature_implementation_plan and added an index; replaced the original file with a pointer.

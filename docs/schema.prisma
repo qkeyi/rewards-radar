@@ -1,5 +1,6 @@
 // This schema is auto-generated based on the Room entities in the project.
 // It reflects the data model used in the application's local database.
+// The application uses a local SQLite database, and the schema is defined using Prisma.
 
 datasource db {
   provider = "sqlite" // Room uses SQLite

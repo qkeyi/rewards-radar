@@ -748,3 +748,5 @@ Assistant: Added 2025-12-28 benefit edit bottom sheet entry to progress and arch
 2026-01-23 16:24 Assistant: Updated tracker generation to update existing offer trackers on date changes instead of creating duplicates.
 2026-01-23 17:16 User: completely remove start and end date from benefit. benefit tracker creation does not factor start and end date, but frequency only.
 2026-01-23 17:16 Assistant: Removed benefit date fields across models/UI/config, updated tracker generation to use frequency only, and added a migration to drop date columns.
+[02/06/2026 05:29PM] User: docs/feature_implementation.md is too many. split it into separate files by feature. store all files in eature_implementation_plan folder
+[02/06/2026 05:29PM] Assistant: Split the feature plan into per-feature files under docs/feature_implementation_plan with an index, and replaced docs/feature_implementation.md with a pointer to the new index.

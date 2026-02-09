@@ -32,7 +32,7 @@
 ## Mandatory Pre-work for Agents
 - Read `docs/product_functionality.md`. overall functionality.
 - Read `docs/architecture.md`. general rules for project structure.
-- Read`docs/feature_implementation_plan/index.md`. feature implementation plan index.
+- Read`docs/features/index.md`. features index.
 - Read`schema.prisma`. system / database structure. 
 
 ## Logging
